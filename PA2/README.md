@@ -1,6 +1,6 @@
 # Assignment 2: Machine Learning Pipeline
 
-## Contents:
+## Contents
 * summary.py - Read and explore data
 * preprocess.py - Pre-process data and generate features
 * classifier.py - Build and evaluate classifiers
@@ -8,5 +8,5 @@
 * write-up.pdf - Write up for the problem
 * Output folder - All files and graphs generated
 
-## Background:
+## Background
 https://www.kaggle.com/c/GiveMeSomeCredit/data
