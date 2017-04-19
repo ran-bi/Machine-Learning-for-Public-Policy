@@ -1,5 +1,10 @@
 # Assignment 2: Machine Learning Pipeline
 
+## Usage Example
+```
+python3 pa2.py data/cs.csv
+```
+
 ## Contents
 * summary.py - Read and explore data
 * preprocess.py - Pre-process data and generate features
