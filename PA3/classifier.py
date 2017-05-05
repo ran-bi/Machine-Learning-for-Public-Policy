@@ -1,5 +1,6 @@
-# Name: Ran Bi
-# Below code is modified from https://github.com/rayidghani/magicloops/blob/master/magicloops.py
+### ML pipeline 3/3: Build, select and evaluate classifier
+### Name: Ran Bi
+### Below code is modified from https://github.com/rayidghani/magicloops/blob/master/magicloops.py
 
 
 from __future__ import division
@@ -27,6 +28,15 @@ import sys
 # Please create a folder named 'evaluation' to save files and graphs.
 
 def define_clfs_params(grid_type = 'standard'):
+    '''
+    Get classifiers and hyperparameters grid to test.
+
+    Input:
+        grid_type: string. 'standard' or 'test'
+
+    Output:
+        a dictionary of classifiers and a dictionary of parameters
+    '''
 
     clfs = {'RF': RandomForestClassifier(n_estimators=50, n_jobs=-1),        
 			'LR': LogisticRegression(penalty='l1', C=1e5),
@@ -65,6 +75,22 @@ def define_clfs_params(grid_type = 'standard'):
 
 
 def clf_loop(models_to_run, clfs, grid, X, y, test_size=0.25, output=True):
+    '''
+    Loop over classifier-parameter combinations and evaluate each classifier by several metrics.
+
+    Inputs:
+        models_to_run: list of string. a list of classifiers to test
+        clfs: dictionary of classifiers (output of define_clfs_params)
+        grid: dictionary of parameters grid (output of define_clfs_params)
+        X: a Pandas dataframe of features
+        y: a Pandas dataframe of the label
+        test_size: float between 0.0 and 1.0 representing the proportion of the dataset to include in the test split. default to 0.25
+        output: bool. True - save the output dataframe to csv file
+
+    Output:
+        a Pandas dataframe including classifiers, parameters, runtime, and evaluation score
+    '''
+
     results_df =  pd.DataFrame(columns=('model_type','clf', 'parameters', 'train_time', 'test_time',
     									'accuracy','f1_score', 'precision', 'recall', 'auc', 
     									'p_at_5', 'p_at_10', 'p_at_20',
@@ -111,6 +137,18 @@ def clf_loop(models_to_run, clfs, grid, X, y, test_size=0.25, output=True):
     return results_df
 
 def evaluate (y_true, y_pred, y_pred_probs):
+    '''
+    Given a classifier, evaluate by various metrics
+
+    Input:
+        y_true: a Pandas dataframe of actual label value
+        y_pred: a Pandas dataframe of predicted label value
+        y_pred_probs: a Pandas dataframe of probability estimates
+
+    Output:
+        rv: a dictionary where key is the metric and value is the score
+
+    '''
 	rv = {}
 
 	metrics = {'accuracy': accuracy_score, 'f1_score': f1_score,
@@ -128,21 +166,36 @@ def evaluate (y_true, y_pred, y_pred_probs):
 	return rv
 
 def generate_binary_at_k(y_pred_probs, k):
+    '''
+    Transform probability estimates into binary at threshold of k
+    '''
+
     cutoff_index = int(len(y_pred_probs) * (k / 100.0))
     y_pred_binary = [1 if x < cutoff_index else 0 for x in range(len(y_pred_probs))]
     return y_pred_binary
 
 def precision_at_k(y_true, y_pred_probs, k):
+    '''
+    Calculate precision score for probability estimates at threshold of k
+    '''
+
     preds_at_k = generate_binary_at_k(y_pred_probs, k)
     precision = precision_score(y_true, preds_at_k)
     return precision
 
 def recall_at_k(y_true, y_pred_probs, k):
+    '''
+    Calculate recall score for probability estimates at threshold of k
+    '''
+
 	preds_at_k = generate_binary_at_k(y_pred_probs, k)
 	recall = recall_score(y_true, preds_at_k)
 	return recall
 
 def plot_precision_recall_n(y_true, y_pred_probs, model_name):
+    '''
+    '''
+
     from sklearn.metrics import precision_recall_curve
     y_score = y_pred_probs
     precision_curve, recall_curve, pr_thresholds = precision_recall_curve(y_true, y_score)
@@ -169,6 +222,7 @@ def plot_precision_recall_n(y_true, y_pred_probs, model_name):
     plt.savefig('evaluation/'+model_name)
     plt.close()
 
+# Not used in PA3
 def predict(df_train, df_pred, X, y, clf=LogisticRegression(), output=True):
 	'''
 	Given features data, predict value based on the classifier user chooses, and add 

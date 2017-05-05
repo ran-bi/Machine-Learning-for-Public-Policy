@@ -1,3 +1,6 @@
+### ML pipeline 2/3: Pre-process data and generate features
+### Name: Ran Bi
+
 import pandas as pd
 import numpy as np
 import csv

@@ -1,3 +1,6 @@
+### ML pipeline 1/3: Read and explore
+### Name: Ran Bi
+
 import pandas as pd
 import numpy as np
 import csv
