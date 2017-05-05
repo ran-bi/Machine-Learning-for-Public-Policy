@@ -12,6 +12,7 @@ python3 pa3.py data/cs.csv
 * pa3.py - Apply machine learning pipeline to Kaggle data
 * Output folder - All summary files and graphs generated
 * Evaluattion folder - All evaluation files and graphs generated
+* Evaluation Result Analysis.ipynb - Code to analyse evaluation table
 
 ## Background
 https://www.kaggle.com/c/GiveMeSomeCredit/data
